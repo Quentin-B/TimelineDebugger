@@ -27,7 +27,7 @@ function show(){
         
         /* draggableLib */
         draggableLib = document.createElement('script');
-        draggableLib.src = chrome.extension.getURL('libs/Draggable.js');
+        draggableLib.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/Draggable.min.js';
         (document.head||document.documentElement).appendChild(draggableLib);
         draggableLib.onload = function() {
             draggableLib.parentNode.removeChild(draggableLib);

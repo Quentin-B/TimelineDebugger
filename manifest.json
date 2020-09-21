@@ -16,7 +16,8 @@
         "index.html",
         "main.js",
         "fonts/*",
-        "libs/*"
+		"libs/*",
+		"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/Draggable.min.js"
     ],
     "page_action": {
         "default_icon": "icon19.png"

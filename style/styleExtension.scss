@@ -11,8 +11,13 @@ $darkThemeColor: rgba(18,157,3,1);
 	border: 1px solid #000;
 	border-radius: 25px;
 	z-index:9999;
-	cursor:pointer;
+	cursor: pointer;
 	font-family: 'CaviarDreams';
+	color: #000;
+
+	.regular {
+		color: #000;
+	}
 
 	button{
 		font-family: 'CaviarDreams';
@@ -257,6 +262,10 @@ $darkThemeColor: rgba(18,157,3,1);
 		width: 100%;
 		height: 36px;
 		margin-top:2px;
+	}
+
+	.track {
+		border: 1px solid rgba(0,0,0,0.5);
 	}
 
 }
