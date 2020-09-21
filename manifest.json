@@ -1,0 +1,55 @@
+{
+    "manifest_version": 2,
+    "name": "Timeline Debugger",
+    "description": "This extension provides controls on all the GSAP TimelineMax in your banner.",
+    "version": "0.0.0.12",
+    "icons": { 
+        "19":"icon19.png", 
+        "48":"icon48.png", 
+        "128":"icon128.png" 
+    },
+    "background":  {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "web_accessible_resources": [
+        "index.html",
+        "main.js",
+        "fonts/*",
+        "libs/*"
+    ],
+    "page_action": {
+        "default_icon": "icon19.png"
+    },
+    "permissions": [
+        "declarativeContent",
+        "activeTab",
+        "https://ajax.googleapis.com/"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+            "*://localhost/*",
+            "*://127.0.0.1/*",
+            "*://mm0030266/*",
+            "*://ae.nflximg.net/*"
+            ],
+            "js": [
+                "jquery-1.11.3.min.js",
+                "libs/scrubber-master/scrubber.js"
+            ],
+            "css" : [ 
+                "style/styleExtension.css",
+                "libs/scrubber-master/scrubber.css"
+            ]
+        }
+    ],
+    "externally_connectable": {
+        "matches": [
+            "*://localhost/*",
+            "*://127.0.0.1/*",
+            "*://mm0030266/*",
+            "*://ae.nflximg.net/*"
+        ]
+    }
+}

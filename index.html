@@ -1,0 +1,43 @@
+<div id="TLDContainer">
+    <div class="arrow-container">
+        <button id="bt_arrow_up"    type="button" class="btn btn-arrow btn-up"      data-clickable="true" title="Play"></button> 
+        <button id="bt_arrow_left"  type="button" class="btn btn-arrow btn-left"    data-clickable="true" title="Previous Frame"></button> 
+        <button id="bt_arrow_down"  type="button" class="btn btn-arrow btn-bottom"  data-clickable="true" title="Reverse"></button> 
+        <button id="bt_arrow_right" type="button" class="btn btn-arrow btn-right"   data-clickable="true" title="Next Frame"></button>       
+    </div>
+
+    <div class="num-container">         
+        <button id="bt_7" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 70% in the timeline" >70%</button>
+        <button id="bt_8" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 80% in the timeline" >80%</button> 
+        <button id="bt_9" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 90% in the timeline" >90%</button> 
+            
+        <button id="bt_4" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 40% in the timeline" >40%</button>
+        <button id="bt_5" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 50% in the timeline" >50%</button> 
+        <button id="bt_6" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 60% in the timeline" >60%</button> 
+              
+        <button id="bt_1" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 10% in the timeline" >10%</button> 
+        <button id="bt_2" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 20% in the timeline" >20%</button> 
+        <button id="bt_3" type="button" class="btn btn-numpad" data-clickable="true" title="Go to 30% in the timeline" >30%</button>                  
+    </div>
+
+    <div class="btn-container">
+        <button id="bt_repeat" type="button" class="btn btn-restart" data-clickable="true" title="Repeat the timeline">Replay</button> 
+        <button id="bt_end" type="button" class="btn btn-end" data-clickable="true" title="Go to the end of the timeline">Jump to end</button> 
+        <div id="speedDiv">
+            Speed:
+            <button id="bt_minus" type="button" class="btn btn-numpad" data-clickable="true" title="Slow down the timeline">-</button> 
+            <button id="bt_plus" type="button" class="btn btn-numpad" data-clickable="true" title="Speed Up the timeline">+</button> 
+        </div>
+        <button id="bt_resume" type="button" class="btn btn-play" data-clickable="true" title="Resume/Pause">Play/Pause</button>
+    </div>
+
+    <div class="info-container">
+        <div class="rowInfo"><div class="info-text">Current Timeline :  </div><div id="infoCurrentTL" class="info-data"></div></div>
+        <div class="rowInfo"><div class="info-text">Time scale :        </div><div id="infoTimeScale" class="info-data"></div></div>
+        <div class="rowInfo"><div class="info-text">Current time :   </div><div id="infoCurrentTime" class="info-data"></div></div>
+        <div class="rowInfo"><div class="info-text">Duration :   </div><div id="infoDurationTL" class="info-data"></div></div>
+        <div class="rowInfo"><div class="info-text">Number of timelines :</div><div id="infoNumberTL" class="info-data"></div></div>
+    </div>
+
+    <div id="timelineContainer" data-clickable="true"></div>
+</div>
