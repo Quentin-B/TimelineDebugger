@@ -346,12 +346,12 @@ TLDebugger.prototype.playBackward = function(){
 }
 
 TLDebugger.prototype.speedUp = function(){
-	var val = this.round(this.currentTL._timeScale+0.1,2);
+	var val = this.round(this.currentTL.timeScale()+0.1,2);
 	this.currentTL.timeScale(val);
 }
 
 TLDebugger.prototype.slowDown = function(){
-	var val = this.round(this.currentTL._timeScale-0.1,2);
+	var val = this.round(this.currentTL.timeScale()-0.1,2);
 	this.currentTL.timeScale(val);
 }
 
@@ -581,7 +581,7 @@ TLDebugger.prototype.bt_arrow_rightHandler = function(){
 
 TLDebugger.prototype.bt_minusHandler = function(){
 	this.slowDown();
-	console.debug("TimeLine Debugger | ","Time Scale : " + this.currentTL._timeScale); 
+	console.debug("TimeLine Debugger | ","Time Scale : " + this.currentTL.timeScale()); 
 }
 
 TLDebugger.prototype.bt_9Handler = function(){
@@ -601,7 +601,7 @@ TLDebugger.prototype.bt_7Handler = function(){
 
 TLDebugger.prototype.bt_plusHandler = function(){
 	this.speedUp(); 
-	console.debug("TimeLine Debugger | ","Time Scale : " + this.currentTL._timeScale);
+	console.debug("TimeLine Debugger | ","Time Scale : " + this.currentTL.timeScale());
 }
 
 TLDebugger.prototype.bt_6Handler = function(){
