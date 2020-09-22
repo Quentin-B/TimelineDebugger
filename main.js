@@ -130,12 +130,9 @@ TLDebugger.prototype.initOverlay = function() {
 	this.bt_plus       .addEventListener('click', this.varBt_plusHandler);
 	this.bt_end        .addEventListener('click', this.varBt_endHandler);
 
-	
-
-	// gsap.ticker.addEventListener("tick", this.varTickerHandler, this.currentTL, true, 1);
 	gsap.ticker.add(this.varTickerHandler);
 
-    // Draggable.create("#TLDContainer", {type:"x,y", edgeResistance:0.65, throwProps:true});
+    Draggable.create("#TLDContainer", {type:"x,y", edgeResistance:0.65, throwProps:true, allowContextMenu:true, dragClickables: false});
 }
 
 TLDebugger.prototype.removeListeners = function removeListeners(e) {
@@ -168,52 +165,40 @@ TLDebugger.prototype.removeListeners = function removeListeners(e) {
 }
 
 TLDebugger.prototype.initSliders = function(){
-	for(var timeline in this.bannerTLs){
-		var rowOpenDiv = this.stringToNode("<div class='row-slider' id='rowslider"+this.bannerTLs[timeline].name+"'></div>");
+	this.bannerTLs.forEach((timeline, index) => {
+		var rowOpenDiv = this.stringToNode("<div class='row-slider' id='rowslider"+timeline.name+"'></div>");
 		this.timelineContainer.appendChild(rowOpenDiv);
 		
-		var nameDiv = this.stringToNode("<div class='name-tl regular'><div class='nameTLSpot'></div>" + this.bannerTLs[timeline].name + "</div>");
-		var rowslider = document.querySelector("#rowslider"+this.bannerTLs[timeline].name);
+		var nameDiv = this.stringToNode("<div class='name-tl regular'><div class='nameTLSpot'></div>" + timeline.name + "</div>");
+		var rowslider = document.querySelector("#rowslider"+timeline.name);
 		rowslider.appendChild(nameDiv);
 
-		var tlDiv = this.stringToNode("<div class='custom-slider-container'></div>");
-		tlDiv.id="slider"+timeline;
-		this.bannerTLs[timeline].sliderID = "slider"+timeline;
+		var tlDiv = this.stringToNode("<div class='custom-slider-container' data-clickable='true'></div>");
+		tlDiv.id="slider"+index;
+		timeline.sliderID = "slider"+index;
+
+		nameDiv.addEventListener("click",this.nameTLClickHandler.bind(this));	
 
 		// Make a new scrubber
 		var scrubber = new ScrubberView();
-		this.bannerTLs[timeline].scrubber = scrubber;
-		scrubber.numTL = timeline;
+		timeline.scrubber = scrubber;
+		scrubber.timeline = timeline;
 		tlDiv.appendChild(scrubber.elt);
 		scrubber.onValueChanged = function (value) {
-			tlDebugger.updateCurrentTL(tlDebugger.bannerTLs[this.numTL]);			
-			tlDebugger.bannerTLs[this.numTL].progress(value).pause();
+			tlDebugger.updateCurrentTL(this.timeline);			
+			this.timeline.progress(value).pause();
 		}
-
+		
 		// Insert labels spots
-		for(var label in this.bannerTLs[timeline]._labels){
-			progressVal = this.bannerTLs[timeline]._labels[label] / this.bannerTLs[timeline].duration() * 100;
-	        var labelSpotDiv = this.stringToNode('<div class="label-spot" data-label="'+ label +'" title="' + label + " = " + this.bannerTLs[timeline]._labels[label] + '"></div>');
+		for(var label in timeline.labels){
+			progressVal = timeline.labels[label] / timeline.duration() * 100;
+	        var labelSpotDiv = this.stringToNode('<div class="label-spot" data-label="'+ label +'" title="' + label + " = " + timeline.labels[label] + '"></div>');
 	        labelSpotDiv.style.marginLeft = "calc("+progressVal+"% - 4px)";
-	        tlDiv.appendChild(labelSpotDiv);
+			tlDiv.appendChild(labelSpotDiv);
+			labelSpotDiv.addEventListener("click",this.labelSpotClickHandler.bind(this));	
 		}
 		rowslider.appendChild(tlDiv);	
-	}
-
-	let nameLT = document.querySelectorAll(".name-tl")
-	
-	if(nameLT) {
-		for(var i = 0 ; i < nameLT.length ; i++){
-			nameLT[i].addEventListener("click",this.nameTLClickHandler.bind(this));	
-		}
-	}
-
-	let labelSpot = document.querySelectorAll(".label-spot")
-
-	if(labelSpot)
-		for(var i = 0 ; i < labelSpot.length ; i++){
-			labelSpot[i].addEventListener("click",this.labelSpotClickHandler.bind(this));	
-		}
+	});
 
 	this.updateActiveSpots();
 }
@@ -235,29 +220,35 @@ TLDebugger.prototype.updateActiveSpots = function(){
 	let currentNameTLSpots = currentRow.querySelectorAll(".nameTLSpot");
 	let currentLabelSpots = currentRow.querySelectorAll("div.custom-slider-container div.label-spot");
 	let nameTLSpot = document.querySelectorAll(".nameTLSpot")
-	let labelSpot = document.querySelectorAll(".labelSpot")
+	let labelSpot = document.querySelectorAll(".label-spot")
 
-	if(nameTLSpot.length > 0)
-		TweenMax.set(".nameTLSpot", { className: "-=active"});
-	if(labelSpot.length > 0)
-		TweenMax.set(".label-spot", { className: "-=active"});
+	nameTLSpot.forEach( (item) => {
+		item.classList.remove("active");
+	})
 
-	if(currentLabelSpots.length > 0)
-		TweenMax.set(currentLabelSpots, { className: "+=active"});	
-	if(currentNameTLSpots.length > 0)
-		TweenMax.set(currentNameTLSpots, { className: "+=active"});	
+	labelSpot.forEach( (item) => {
+		item.classList.remove("active");
+	})
+
+	currentLabelSpots.forEach( (item) => {
+		item.classList.add("active");
+	})
+
+	currentNameTLSpots.forEach( (item) => {
+		item.classList.add("active");
+	})
 }
 
 TLDebugger.prototype.getBannerTLs = function() {
-	this.bannerTLs = new Array();
+	let bannerTLs = new Array();
 	for(var propertyName in this.timelineParent) {
 		if( (this.timelineParent[propertyName] instanceof TimelineMax) ||
 			(this.timelineParent[propertyName] instanceof TimelineLite) ){
 			this.timelineParent[propertyName].name = propertyName;
-			this.bannerTLs.push(this.timelineParent[propertyName]);
+			bannerTLs.push(this.timelineParent[propertyName]);
 		}
 	}   
-	return this.bannerTLs;
+	return bannerTLs;
 }
 
 TLDebugger.prototype.updateCurrentTL = function(newTimeline){
@@ -295,16 +286,16 @@ TLDebugger.prototype.updateGUI = function(){
 */
 
 TLDebugger.prototype.tickerHandler = function(event) {
-	for(var timeline in this.bannerTLs){
+	this.bannerTLs.forEach((timeline) => {
 		try {
-		    this.bannerTLs[timeline].scrubber.value(this.bannerTLs[timeline].progress(),false);
+		    timeline.scrubber.value(timeline.progress(),false);
 		    this.updateGUI();
 		}
 		catch(err) {
 		    // Can trigger an error if listener are not ready
 		    // Can be ignored
 		}
-	}
+	});
 }
 
 TLDebugger.prototype.endFrame = function(){
@@ -654,12 +645,12 @@ TLDebugger.prototype.bt_repeatHandler = function(){
 }
 
 TLDebugger.prototype.labelSpotClickHandler = function(event){
-	for(var timeline in this.bannerTLs){
-		if(this.bannerTLs[timeline].sliderID === event.currentTarget.offsetParent.id){
-			this.updateCurrentTL(this.bannerTLs[timeline]);
+	this.bannerTLs.forEach( (timeline) => {
+		if(timeline.sliderID === event.currentTarget.offsetParent.id){
+			this.updateCurrentTL(timeline);
 			this.currentTL.seek(event.currentTarget.dataset.label);
 		}
-	}
+	})
 }
 
 TLDebugger.prototype.nameTLClickHandler = function(event){
